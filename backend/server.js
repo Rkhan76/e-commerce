@@ -3,6 +3,8 @@ import colors from 'colors';
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import morgan from 'morgan';
+import authRoute from './routes/authRoute.js'
+import { isAdmin, requireSignIn } from './middlewares/authMiddleware.js'
 
 //configure env
 dotenv.config()
@@ -17,6 +19,15 @@ const port = process.env.PORT || 8080
 //middlewares
 app.use(express.json())
 app.use(morgan('dev'))
+
+//routes
+app.use("/api/v1/auth", authRoute)
+
+app.get('/test', requireSignIn,isAdmin, (req, res)=>{
+    res.json({
+        msg: "hllo i am here"
+    })
+})
 
 app.listen(port, ()=>{
     console.log(`server is running in ${process.env.DEV_MODE} on port 8080`)
