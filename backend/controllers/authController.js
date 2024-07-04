@@ -5,7 +5,7 @@ import { comparePassword, hashPassword } from '../helpers/authHelper.js'
 async function registerController(req, res){
 try{
  const { name, email, password, phone, address} = req.body
- console.log(name)
+ console.log(name, email, password, phone, address)
 
  // data validation through zod
 
@@ -15,7 +15,7 @@ console.log(existinguser)
  //existing user
 if(existinguser){
     return res.status(200).json({
-        success: true,
+        success: false,
         message: "Aleardy Register please login",
 
     })
@@ -48,13 +48,15 @@ return res.status(500).json({
 //LOGIN || POST
 
 async function handleUserLogin(req, res){
+    const { email, password } = req.body
+    console.log(email)
     try{
-        const { email, password } = req.body
-
+        
         //validation through zod 404
 
         //find user
         const user = await userModel.findOne({ email })
+    
         
         if(!user){
             return res.status(200).json({
@@ -75,7 +77,7 @@ async function handleUserLogin(req, res){
         const token = await JWT.sign({ _id: user._id}, process.env.JWT_SECRET, { expiresIn: '7d'})
         return res.status(200).json({
             success: true,
-            message: 'login',
+            message: 'login successfull',
             user: {
                 name: user.name,
                 email: user.email,

@@ -3,6 +3,7 @@ import colors from 'colors';
 import dotenv from 'dotenv'
 import connectDB from './config/db.js'
 import morgan from 'morgan';
+import cors from 'cors'
 import authRoute from './routes/authRoute.js'
 import { isAdmin, requireSignIn } from './middlewares/authMiddleware.js'
 
@@ -17,7 +18,9 @@ const app = express()
 const port = process.env.PORT || 8080
 
 //middlewares
+app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded())
 app.use(morgan('dev'))
 
 //routes
