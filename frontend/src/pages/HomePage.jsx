@@ -1,6 +1,7 @@
 import React from 'react'
 import Layout from '../commponents/layout/Layout'
 
+
 const HomePage = () => {
   return (
     <Layout

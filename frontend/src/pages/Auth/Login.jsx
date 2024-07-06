@@ -1,13 +1,15 @@
-import React, { useState } from 'react'
+import { useState, useContext } from 'react'
 import Layout from '../../commponents/layout/Layout.jsx'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import AuthContext from '../../context/AuthContext.jsx'
 
 const Login = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
+  const { setAuth } = useContext(AuthContext)
 
   const handleSubmit = async (e) => {
     try {
@@ -19,8 +21,10 @@ const Login = () => {
         { email, password }
       )
 
-      if (res) {
-        localStorage.setItem('token', res.data.token) // i have to remove bearer first add bearer in backend
+      
+      if (res && res.data.success) {
+        localStorage.setItem('auth', JSON.stringify(res.data)) // i have to remove bearer first add bearer in backend
+        setAuth({ user: res.data.user, token: res.data.token })
         toast.success(res.data.message || 'Login Successfull')
         navigate('/')
         
